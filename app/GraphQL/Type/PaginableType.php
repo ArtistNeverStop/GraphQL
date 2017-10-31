@@ -18,19 +18,21 @@ class PaginableType extends UnionType
      */
     public function __construct($config = null)
     {
-        parent::__construct([
+        parent::__construct(
+            [
             'name' => 'Paginable',
             'types' => [
                 Types::product(),
                 Types::user()
             ],
-            'resolveType' => function($builder) {
+            'resolveType' => function ($builder) {
                 if ($builder->getModel() instanceof User) {
                     return Types::user();
                 } else {
                     return Types::product();
                 }
             },
-        ]);
+            ]
+        );
     }
 }

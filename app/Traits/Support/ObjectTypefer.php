@@ -13,6 +13,6 @@ trait ObjectTypefer
      */
     public function toObjectType() : ObjectType
     {
-    	return new ObjectType($this->toArray());
+        return new ObjectType($this->toArray());
     }
 }

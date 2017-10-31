@@ -8,33 +8,36 @@ use App\GraphQL\Types;
 
 class EdgeType extends FluentType
 {
-	/**
-	 * The name of The type
-	 *
-	 * @var string
-	 */
-	public $name = 'Edge';
+    /**
+     * The name of The type
+     *
+     * @var string
+     */
+    public $name = 'Edge';
 
-	/**
-	 * The name of The type
-	 *
-	 * @var string
-	 */
-	public function fields() {
-		return [
-			'node' => Type::listOf(Types::entity()),
-			'cursor' => [
-				'type' => Type::string()
-        	],
-		];
-	}
-
-	/**
-	 * The name of The type
-	 *
-	 * @var string
-	 */
-	public function resolve() {
-		dd('resolve');
-	}
+    /**
+     * The name of The type
+     *
+     * @var string
+     */
+    public function fields()
+    {
+        return [
+            'node' => [
+                'type' => Types::entity(),
+                'resolve' => function ($parent, $args, $context, ResolveInfo $info) {
+                    return $parent;
+                    // return [
+                    //     'name' => $parent->name
+                    // ];
+                }
+            ],
+            'cursor' => [
+                'type' => Type::string(),
+                'resolve' => function ($parent, $args, $context, ResolveInfo $info) {
+                    return $parent->id;
+                }
+            ]
+        ];
+    }
 }

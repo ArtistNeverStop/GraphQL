@@ -32,6 +32,15 @@ class User extends Authenticatable
      *
      * @var array
      */
+    public $queryableRelations = [
+        'products',
+    ];
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     public $alwaysSelect = [
         'id',
     ];
@@ -45,7 +54,8 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function products () {
+    public function products()
+    {
         return $this->hasMany('App\Product');
     }
 }

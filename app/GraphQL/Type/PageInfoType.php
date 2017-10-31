@@ -8,26 +8,33 @@ use App\GraphQL\Types;
 
 class PageInfoType extends FluentType
 {
-	/**
-	 * The name of The type
-	 *
-	 * @var string
-	 */
-	public $name = 'PageInfo';
+    /**
+     * The name of The type
+     *
+     * @var string
+     */
+    public $name = 'PageInfo';
 
-	/**
-	 * The name of The type
-	 *
-	 * @var string
-	 */
-	public function fields() {
-		return [
-        	'endCursor' => [
-				'type' => Type::string()
-        	],
-        	'nextPage' => [
-				'type' => Type::string()
-        	]
-		];
-	}
+    /**
+     * The name of The type
+     *
+     * @var string
+     */
+    public function fields()
+    {
+        return [
+            'node' => [
+                'type' => Types::entity(),
+                'resolve' => function ($parent, $args, $context, ResolveInfo $info) {
+                    return $parent;
+                }
+            ],
+            'cursor' => [
+                'type' => Type::string(),
+                'resolve' => function ($parent, $args, $context, ResolveInfo $info) {
+                    return $parent->id;
+                }
+            ]
+        ];
+    }
 }

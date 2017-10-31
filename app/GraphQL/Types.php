@@ -104,19 +104,23 @@ class Types
     /**
      * @return PaginableType
      */
-    public static function makeNestedBuilder(&$builder, $queryNested)
+    public static function makeNestedBuilder(&$builder, $queryNested, $info = null)
     {
         $relations = $with = $fields = [];
         foreach ($queryNested as $key => $item) {
             if (in_array($key, $builder->getModel()->queryable)) {
                 $fields[] = $key;
-            } else if (is_array($item)) {
+            } else if (is_array($item) && in_array($key, $builder->getModel()->queryableRelations)) {
                 $relations[] = $key;
             }
         }
-        $fields += $builder->getModel()->alwaysSelect;
+        $fields = array_merge($fields, $builder->getModel()->alwaysSelect);
         $builder->select($fields);
         foreach ($relations as $relation) {
+            // $limit = null;
+            // if (substr($relation, -10) === 'Connection') {
+            //     $relation = explode('Connection', $relation)[0];
+            // }
             $with[$relation] = function (&$query) use ($queryNested, $relation) {
                 static::makeNestedBuilder($query, $queryNested[$relation]);
             };
@@ -124,5 +128,4 @@ class Types
         $builder->with($with);
         return $builder;
     }
-
 }
